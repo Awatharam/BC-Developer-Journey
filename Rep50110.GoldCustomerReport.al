@@ -40,8 +40,9 @@ report 50110 "Gold Customer Report"
         layout(WordLayout)
         {
             Type = Word;
-            LayoutFile = 'Rep50200.GoldCustomerReport.docx';
+            LayoutFile = 'Rep50110.GoldCustomerReport.docx';
             Caption = 'Gold Customer Report (Word)';
         }
     }
+
 }
