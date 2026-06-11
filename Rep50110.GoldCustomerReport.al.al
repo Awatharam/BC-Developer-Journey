@@ -3,6 +3,7 @@ report 50110 "Gold Customer Report"
     UsageCategory = ReportsAndAnalysis;
     ApplicationArea = All;
     Caption = 'Gold Customer Report';
+    DefaultRenderingLayout = WordLayout;
 
     dataset
     {
@@ -31,6 +32,16 @@ report 50110 "Gold Customer Report"
 
         actions
         {
+        }
+    }
+
+    rendering
+    {
+        layout(WordLayout)
+        {
+            Type = Word;
+            LayoutFile = 'Rep50200.GoldCustomerReport.docx';
+            Caption = 'Gold Customer Report (Word)';
         }
     }
 }
