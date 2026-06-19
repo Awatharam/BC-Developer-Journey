@@ -11,21 +11,26 @@ report 50110 "Gold Customer Report"
         {
             RequestFilterFields = "No.", "Customer Posting Group";
 
-            column(No; "No.")
-            {
-            }
-            column(Name; Name)
-            {
-            }
-            column(BalanceLCY; "Balance (LCY)")
-            {
-            }
-            column(CustomerPostingGroup; "Customer Posting Group")
-            {
-            }
-            column(CreditLimitLCY; "Credit Limit (LCY)")
-            {
-            }
+            column(RowNo; RowNumber) { }
+
+            column(No; "No.") { }
+            column(Name; Name) { }
+            column(BalanceLCY; "Balance (LCY)") { }
+            column(CustomerPostingGroup; "Customer Posting Group") { }
+            column(CreditLimitLCY; "Credit Limit (LCY)") { }
+
+            trigger OnAfterGetRecord()
+            begin
+                RowNumber += 1;
+            end;
+
+            trigger OnPreDataItem()
+            begin
+                RowNumber := 0;
+
+                if MinBalanceFilter <> 0 then
+                    Customer.SetFilter("Balance (LCY)", '>=%1', MinBalanceFilter);
+            end;
         }
     }
 
@@ -65,4 +70,5 @@ report 50110 "Gold Customer Report"
 
     var
         MinBalanceFilter: Decimal;
+        RowNumber: Integer;
 }
