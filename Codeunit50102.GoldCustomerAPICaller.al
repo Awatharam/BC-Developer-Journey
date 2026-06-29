@@ -1,3 +1,8 @@
+// Calls BC270API's own Gold Customer API endpoint (Page 50102) from AL via HttpClient.
+// Two-step flow: (1) resolve the company GUID dynamically from /companies,
+// (2) call /companies({guid})/goldCustomers and count the results.
+// The sync result is logged into Table 50100 "Gold Customer Log" as a summary row,
+// reusing the same Insert(true) AutoIncrement pattern as Codeunit 50101.
 codeunit 50102 "Gold Customer API Caller"
 {
     procedure SyncFromApi(): Integer
@@ -13,8 +18,11 @@ codeunit 50102 "Gold Customer API Caller"
     begin
         BaseUrl := 'http://localhost:7248/BC270API/api/mk/goldCustomer/v1.0';
         UserName := 'MKAPI';
-        Password := '<MKAPI_PASSWORD>'; // TODO: replace before running, remove before commit
-        //Password := 'XXXXXX'; // TODO: replace before running, remove before commit
+
+        // Credential stored in Isolated Storage, not in source — see SetApiPassword below.
+        // Run SetApiPassword once per environment before calling SyncFromApi for the first time.
+        if not IsolatedStorage.Get(PasswordKey(), Password) then
+            Error('API password not set. Call SetApiPassword first to store it in Isolated Storage.');
 
         Client.DefaultRequestHeaders().Add('Authorization', GetBasicAuthHeader(UserName, Password));
 
@@ -37,7 +45,8 @@ codeunit 50102 "Gold Customer API Caller"
 
         GoldCustomerCount := CountGoldCustomers(Response);
 
-        // Step 3 — log the result (AutoIncrement handles Entry No., matches existing pattern)
+        // Step 3 — log the result. Entry No. is AutoIncrement (Table 50100), so Insert(true)
+        // is enough — no GetNextEntryNo() needed, matching the established project pattern.
         GoldCustomerLog.Init();
         GoldCustomerLog."Customer No." := '';
         GoldCustomerLog."Customer Name" := StrSubstNo('API Sync — %1 Gold Customers retrieved', GoldCustomerCount);
@@ -46,6 +55,19 @@ codeunit 50102 "Gold Customer API Caller"
         GoldCustomerLog.Insert(true);
 
         exit(GoldCustomerCount);
+    end;
+
+    // One-time setup: stores the MKAPI password in Isolated Storage for this BC instance.
+    // Call once (e.g. via a test page action or the AL debugger), then it persists —
+    // it is never written to or read from AL source code.
+    procedure SetApiPassword(NewPassword: Text)
+    begin
+        IsolatedStorage.Set(PasswordKey(), NewPassword, DataScope::Module);
+    end;
+
+    local procedure PasswordKey(): Text
+    begin
+        exit('MKAPI_Password');
     end;
 
     local procedure GetBasicAuthHeader(UserName: Text; Password: Text): Text
@@ -57,6 +79,7 @@ codeunit 50102 "Gold Customer API Caller"
         exit('Basic ' + Base64Convert.ToBase64(Credentials));
     end;
 
+    // Parses the /companies OData response and returns the first company's GUID.
     local procedure ExtractFirstCompanyGuid(var Response: HttpResponseMessage): Text
     var
         ResponseText: Text;
@@ -83,6 +106,7 @@ codeunit 50102 "Gold Customer API Caller"
         exit(IdToken.AsValue().AsText());
     end;
 
+    // Parses the /goldCustomers OData response and returns the record count.
     local procedure CountGoldCustomers(var Response: HttpResponseMessage): Integer
     var
         ResponseText: Text;

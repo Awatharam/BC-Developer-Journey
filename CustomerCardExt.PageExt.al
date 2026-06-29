@@ -1,3 +1,6 @@
+// Surfaces the Customer Priority field on the standard Customer Card.
+// OnValidate gives an immediate confirmation message when a customer
+// is marked High priority ("Gold").
 pageextension 50101 CustomerCardExt extends "Customer Card"
 {
     layout

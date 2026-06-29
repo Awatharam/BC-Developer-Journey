@@ -18,6 +18,21 @@
             "enableSqlInformationDebugger": true,
             "tenant": "default",
             "usePublicURLFromServer": true
+        },
+        {
+            "name": "BC270API (publish only, no browser)",
+            "request": "launch",
+            "type": "al",
+            "environmentType": "OnPrem",
+            "server": "http://localhost:7245",
+            "serverInstance": "BC270API",
+            "authentication": "UserPassword",
+            "port": 7248,
+            "startupObjectId": 22,
+            "startupObjectType": "Page",
+            "breakOnError": "All",
+            "launchBrowser": false,
+            "tenant": "default"
         }
     ]
 }

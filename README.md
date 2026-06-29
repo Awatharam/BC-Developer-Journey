@@ -24,3 +24,17 @@ Day 2: Word layout (.docx) wired up via rendering block
 Day 3: XML Mapping Pane used to bind all 5 columns to the Word layout — report prints all 70 customers with data
 Day 4: Word layout styling — title, dark header row, column widths, table borders
 Day 5: Added running row number column, fixed dormant Minimum Balance filter (SetFilter in OnPreDataItem), full report testing, PDF export, project cleanup
+
+Week 4 — API Integration ✅
+
+Day 1: API project planning — decided to build a custom Gold Customer API instead of restcountries.com, for a more cohesive portfolio story tied back into Week 2
+Day 2: Page 50102 "Gold Customer API" — custom OData endpoint exposing Gold (High priority) customers (No., Name, Balance, Posting Group, Credit Limit)
+Day 3: Stood up a dedicated BC270API server instance (NavUserPassword auth) to safely test Basic Auth without touching BC270's main Windows-auth setup; validated all endpoints via Postman
+Day 4: Codeunit 50102 "Gold Customer API Caller" — AL HttpClient calls BC270API's own API from BC270, dynamically resolves the company GUID, retrieves and counts Gold Customers, logs the result into the existing Gold Customer Log table; triggered via a new "Sync from API" action
+Day 5: Full code review and commenting across all 4 weeks, two real bug fixes — Page 50102 was missing its Gold-customer filter (returned all customers, not just High priority), and the API password was moved from a hardcoded string to Isolated Storage — final regression test, README update, project complete
+
+---
+
+🏆 21-Day BC Developer Journey — Complete
+
+Four weeks, from a single table extension to a full custom API integration calling back into BC's own event and logging architecture. Built toward MB-820 certification prep.

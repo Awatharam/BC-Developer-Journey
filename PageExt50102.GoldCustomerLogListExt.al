@@ -1,3 +1,6 @@
+// Adds a "Sync from API" action to the Gold Customer Log List page, letting users
+// manually trigger Codeunit 50102's SyncFromApi on demand. Refreshes the page
+// afterward so the new log entry appears immediately.
 pageextension 50102 "Gold Customer Log List Ext" extends "Gold Customer Log List"
 {
     actions

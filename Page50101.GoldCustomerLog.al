@@ -1,3 +1,6 @@
+// Read-only list view of Table 50100 "Gold Customer Log". Shows both per-order
+// log entries (Week 2 subscriber) and API sync summary rows (Week 4 — see
+// PageExtension 50102's "Sync from API" action, which triggers new entries here).
 page 50101 "Gold Customer Log List"
 {
     PageType = List;
