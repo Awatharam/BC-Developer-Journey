@@ -38,3 +38,9 @@ Day 5: Full code review and commenting across all 4 weeks, two real bug fixes �
 🏆 21-Day BC Developer Journey — Complete
 
 Four weeks, from a single table extension to a full custom API integration calling back into BC's own event and logging architecture. Built toward MB-820 certification prep.
+
+---
+
+Bonus — Role Center Navigation
+
+PageExt50103 "Order Processor RoleCenter Ext" — adds a "BC Developer Journey" group to the Order Processor Role Center nav bar, linking directly to the Gold Customer Log List, Gold Customer Report, and Customer List (Gold Priority customers)
